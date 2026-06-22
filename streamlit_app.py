@@ -28,6 +28,11 @@ my_dataframe =session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col("FRUIT_
 st.dataframe(data=my_dataframe, use_container_width=True)
 st.stop()
 
+#Convert the snowpark dataframe to a pandas DataFrame so we can use the LOC Function
+pd_df=my_dataframe.to_pandas()
+st.dataframe(pd_df)
+st.stop()
+
 # Convert dataframe to list for multiselect
 fruit_options = [
     row["FRUIT_NAME"]
