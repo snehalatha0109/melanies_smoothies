@@ -43,8 +43,8 @@ ingredients_list = st.multiselect(
 
 # Submit Section
 if ingredients_list:
-    st.subheader(fruit_chosen + 'Nutrition Information')
     ingredients_string = ", ".join(ingredients_list)
+    st.subheader(fruit_chosen + 'Nutrition Information')
     
     smoothiefroot_response = requests.get(
         "https://my.smoothiefroot.com/api/fruit/" + fruit_chosen
