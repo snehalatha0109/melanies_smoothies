@@ -1,6 +1,5 @@
 # Import python packages
 import streamlit as st
-from snowflake.snowpark.context import get_active_session
 from snowflake.snowpark.functions import col
 
 # App Title
@@ -19,7 +18,8 @@ st.write(
 )
 
 # Snowflake Session
-session = get_active_session()
+cnx = st.connection("snowflake")
+session = cnx.session()
 
 # Get Fruit Options
 my_dataframe = (
