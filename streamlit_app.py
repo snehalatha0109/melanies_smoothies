@@ -24,10 +24,7 @@ cnx = st.connection("snowflake")
 session = cnx.session()
 
 # Get Fruit Options
-my_dataframe =
-    session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
-    .select(col("FRUIT_NAME"), col("SEARCH_ON")
-)
+my_dataframe =session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS").select(col("FRUIT_NAME"), col("SEARCH_ON"))
 st.dataframe(data=my_dataframe, use_container_width=True)
 st.stop()
 
