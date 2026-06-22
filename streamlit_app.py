@@ -38,13 +38,22 @@ fruit_options = [
 # Ingredient Selection
 ingredients_list = st.multiselect(
     'Choose up to 5 ingredients:',
-    my_dataframe, max_selections=5
+    fruit_options, max_selections=5
 )
 
 # Submit Section
 if ingredients_list:
 
     ingredients_string = ", ".join(ingredients_list)
+
+    smoothiefroot_response = requests.get(
+        "https://my.smoothiefroot.com/api/fruit/watermelon"
+    )
+
+    sf_df = st.dataframe(
+        data=smoothiefroot_response.json(),
+        use_container_width=True
+    )
 
     submit_order = st.button('Submit Order')
 
@@ -69,7 +78,6 @@ if ingredients_list:
             f'✅ Your Smoothie is ordered, {name_on_order}!'
         )
 
-smoothiefroot_response = requests.get("https://my.smoothiefroot.com/api/fruit/watermelon")  
-sf_df = st.dataframe(data=smoothiefroot_response.json(), use_container_width=True)
+
 
       
