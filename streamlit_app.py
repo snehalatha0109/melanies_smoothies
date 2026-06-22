@@ -1,0 +1,70 @@
+# Import python packages
+import streamlit as st
+from snowflake.snowpark.context import get_active_session
+from snowflake.snowpark.functions import col
+
+# App Title
+st.title(':cup_with_straw: Customize Your Smoothie! :cup_with_straw:')
+
+st.write(
+    """Choose the fruits you want in your custom Smoothie!"""
+)
+
+# Name Input
+name_on_order = st.text_input('Name on Smoothie:')
+
+st.write(
+    'The name on your Smoothie will be:',
+    name_on_order
+)
+
+# Snowflake Session
+session = get_active_session()
+
+# Get Fruit Options
+my_dataframe = (
+    session.table("SMOOTHIES.PUBLIC.FRUIT_OPTIONS")
+    .select(col("FRUIT_NAME"))
+)
+
+# Convert dataframe to list for multiselect
+fruit_options = [
+    row["FRUIT_NAME"]
+    for row in my_dataframe.collect()
+]
+
+# Ingredient Selection
+ingredients_list = st.multiselect(
+    'Choose up to 5 ingredients:',
+    my_dataframe, max_selections=5
+)
+
+# Submit Section
+if ingredients_list:
+
+    ingredients_string = ", ".join(ingredients_list)
+
+    submit_order = st.button('Submit Order')
+
+    if submit_order:
+
+        my_insert_stmt = f"""
+        INSERT INTO SMOOTHIES.PUBLIC.ORDERS
+        (
+            NAME_ON_ORDER,
+            INGREDIENTS
+        )
+        VALUES
+        (
+            '{name_on_order}',
+            '{ingredients_string}'
+        )
+        """
+
+        session.sql(my_insert_stmt).collect()
+
+        st.success(
+            f'✅ Your Smoothie is ordered, {name_on_order}!'
+        )
+
+      
